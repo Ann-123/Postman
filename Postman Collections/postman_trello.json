@@ -1,0 +1,526 @@
+{
+  "info": {
+    "_postman_id": "a762b9f5-4daf-4fd9-9044-5aaaf06ba348",
+    "name": "TrelloTests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "BoardTests",
+      "item": [
+        {
+          "name": "create board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "865f7a1e-e801-40fa-bd7f-ee9e4343e2fc",
+                "exec": [
+                  "var id = pm.response.json().id;",
+                  "pm.globals.set(\"board_id\",id)",
+                  "",
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "cee871b1-4537-47e4-bb09-95bcab929dd9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_1\",\n    \"desc\":\"this board for create_test\",\n    \"prefs_permissionLevel\":\"public\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}boards?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create Private board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6e44e352-16bf-4d83-9ee4-8755797c89ad",
+                "exec": [
+                  "var jsonResponse=pm.response.json();",
+                  "",
+                  "pm.test(\"Board Private test\", function(){",
+                  "    pm.expect(jsonResponse.prefs.permissionLevel).to.eq(\"private\")",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "d7cb5db1-ebaa-466c-9db8-a3adbd5f0cac",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_private\",\n    \"desc\":\"this board for create_test\",\n    \"prefs_permissionLevel\":\"private\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}boards?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "positive",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "a09ce755-2605-4a3a-82a5-827ca99d9f72",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Board name text\",function(){",
+                  "    pm.expect(pm.response.text()).to.include(\"new_1\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "8923e4b3-0826-4340-9a9d-405148b3b21d",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{trello_url}}members/me/boards?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}members"
+              ],
+              "path": [
+                "me",
+                "boards"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "id test",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "84db4539-9647-43f8-8d4a-30d16436298f",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "var jsonResponse=pm.response.json();",
+                  "",
+                  "pm.test(\"Board name test\",function(){",
+                  "    pm.expect(jsonResponse.name).to.eq(\"обучение Postman\")",
+                  "});",
+                  "",
+                  "pm.test(\"Board desc test\",function(){",
+                  "    pm.expect(jsonResponse.desc).to.eq(\"\")",
+                  "});",
+                  "",
+                  "pm.test(\"Board ID test\",function(){",
+                  "    pm.expect(jsonResponse.id).to.eq(pm.globals.get(\"board_id\"))",
+                  "});",
+                  "",
+                  "pm.test(\"Board Voiting test\",function(){",
+                  "    pm.expect(jsonResponse.prefs.voting).to.eq(\"disabled\")",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "56159ba0-3f32-4c7d-96e4-72d62efd2027",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{trello_url}}boards/{{board_id}}/?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "path": [
+                "{{board_id}}",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "25183f43-e5d4-4af5-bcae-6c5aa2e3fe28",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "39b4dd0f-f64c-4920-b5d6-cfce2405f293",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_1_update\",\n    \"desc\":\"хз, что за таблица\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}/board/{{board_id}}/?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}"
+              ],
+              "path": [
+                "board",
+                "{{board_id}}",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d269b35f-7691-472f-a670-4a74de40c736",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "eada1f32-b718-4c19-af25-da9481a83c6e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_1\",\n    \"desc\":\"this board for create_test\",\n    \"prefs_permissionLevel\":\"public\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}boards/{{board_id}}?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "path": [
+                "{{board_id}}"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "create board where name= empty",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3dda4c03-b175-4e7a-bcab-0499f76a8ba4",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "c538d092-8fa8-437f-9747-3216b3582ccc",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_1\",\n    \"desc\":\"this board for create_test\",\n    \"prefs_permissionLevel\":\"public\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}boards?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update board without token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3091f002-e582-4509-84bf-b2cda767a560",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "f60539db-5630-4a92-bef4-adf24011392c",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\":\"new_1_update\",\n    \"desc\":\"хз, что за таблица\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{trello_url}}boards/61c463c50a8f7f426a9f4aad/?key={{trello_key}}&token={{trello_token}}",
+              "host": [
+                "{{trello_url}}boards"
+              ],
+              "path": [
+                "61c463c50a8f7f426a9f4aad",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "{{trello_key}}"
+                },
+                {
+                  "key": "token",
+                  "value": "{{trello_token}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "0dabc542-2bef-489c-b931-9c6c2176176b",
+                "exec": [
+                  "pm.test(\"Status code test\",function(){",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Board name text\",function(){",
+                  "    pm.expect(pm.response.text()).to.include(\"invalid token\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "_postman_id": "33b6ff8b-dbe3-42db-9c99-f0f3c7df56e8",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{trello_url}}members/me/boards",
+              "host": [
+                "{{trello_url}}members"
+              ],
+              "path": [
+                "me",
+                "boards"
+              ],
+              "query": [
+                {
+                  "key": "key",
+                  "value": "c2f5b3ae6ab0263ba824e19f7004f11e",
+                  "disabled": true
+                },
+                {
+                  "key": "token",
+                  "value": "49cc48b9cb86d84a55710a26c0f1cc97e3a4674ba71f52cabf21ad8dc7a043f8",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "_postman_id": "c64dcd44-e25c-4d6c-a46f-fbb84d6622d1"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "b8d79bc6-f5a6-443e-a304-7bcd0c2ccd4f",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "e1dadae9-1238-45be-b561-5ea380d0b716",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
